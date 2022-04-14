@@ -21,12 +21,12 @@ class Experiment():
 		self.momentum = momentum
 
 
-	def add_results(self, VALUE_HISTORY, ALPHA, WEALTH_HISTORY, ALPHA_BAR, Z):
+	def add_results(self, VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY):
 		self.VALUE_HISTORY = VALUE_HISTORY
-		self.ALPHA = ALPHA
+		self.ALPHA_HISTORY = ALPHA_HISTORY
 		self.WEALTH_HISTORY = WEALTH_HISTORY
-		self.ALPHA_BAR = ALPHA_BAR
-		self.Z = Z
+		self.ALPHA_BAR_HISTORY = ALPHA_BAR_HISTORY
+		self.Z_HISTORY = Z_HISTORY
 
 
 	def save_to_file(self, file_name):
@@ -41,13 +41,15 @@ class Experiment():
 		fig, axs = plt.subplots(2, 2,figsize=(10,10))
 
 
-		axs[0,0].plot(self.ALPHA_BAR[len(self.ALPHA_BAR)-1])
+		axs[0,0].plot(self.ALPHA_BAR_HISTORY[-1])
 		axs[0,0].set_title("Alpha Bar")
 		axs[0,0].set(xlabel='T', ylabel='Mean Hash Power')
 
-		axs[0,1].plot(self.Z[len(self.Z)-1])
-		axs[0,1].set_title("Z")
-		axs[0,1].set(xlabel='Wealth', ylabel='Transaction Value in Block')
+		# axs[0,1].plot(self.Z[len(self.Z)-1])
+		# axs[0,1].set_title("Z")
+		# axs[0,1].set(xlabel='Wealth', ylabel='Transaction Value in Block')
+
+		
 
 		wealth = self.WEALTH_HISTORY[len(self.WEALTH_HISTORY)-1]
 		color = iter(cm.rainbow(np.linspace(0, 1, len(wealth))))
@@ -56,6 +58,14 @@ class Experiment():
 			axs[1,0].plot(w, c=c)
 		axs[1,0].set_title("Wealth Evolution in Final Iteration")
 		axs[1,0].set(xlabel='Wealth', ylabel='Proportion of Miners')
+
+		zs = []
+		for z in self.Z_HISTORY[-1]:
+			zs.append(z[-1])
+		axs[1,1].plot(zs)
+		axs[1,1].set_title("Z")
+		axs[1,1].set(xlabel='T', ylabel='Transaction Value')
+
 
 		plt.show()
 

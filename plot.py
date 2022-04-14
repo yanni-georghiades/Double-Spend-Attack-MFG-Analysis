@@ -11,6 +11,5 @@ try:
 except Exception as ex:
     print("Error during unpickling object (Possibly unsupported):", ex)
 
-print(experiment.Z)
 
 experiment.plot()

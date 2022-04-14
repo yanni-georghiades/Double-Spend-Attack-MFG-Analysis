@@ -1,21 +1,10 @@
 from adversary_model import adv_prob, A
 from fee_function import fee
 
-# default parameters
-k_default = 6
-beta_default = .4
-block_reward_default = 10
-mining_cost_default = 1. 
-num_agents_default = 10
 
-max_wealth = 100
-max_tx_value = 100
-
-
-
-def reward(alpha, z, alpha_bar):
-    return R(alpha, z, alpha_bar, beta_default, k_default, mining_cost_default, 
-             num_agents_default, block_reward_default)
+def reward(exp, alpha, z, alpha_bar):
+    return R(alpha, z, alpha_bar, exp.beta, exp.k, exp.mining_cost, 
+             exp.num_agents, exp.block_reward)
 
 def win_reward(z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
     return (1-(1-adv_prob(alpha_bar, beta, k))*A(z, alpha_bar, beta, k, block_reward, num_agents, mining_cost)) \
