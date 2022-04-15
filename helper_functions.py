@@ -48,9 +48,12 @@ def best_actions(exp, alpha_bar, wealth, values):
     z1 = zh
     z2 = exp.max_tx_value
     
+
+    max_alpha = wealth / exp.mining_cost
+
     # test z_hat
     rewards1 = []
-    for alpha_i in np.arange(0, wealth + alpha_step_size/2, alpha_step_size):
+    for alpha_i in np.arange(0, max_alpha + alpha_step_size/2, alpha_step_size):
         wr = win_reward(z1, alpha_bar, exp.beta, exp.k, exp.mining_cost, 
                         exp.num_agents, exp.block_reward) - alpha_i * exp.mining_cost
         wp = win_probability(alpha_i, alpha_bar, exp.num_agents)
@@ -68,7 +71,7 @@ def best_actions(exp, alpha_bar, wealth, values):
         
     # test max z
     rewards2 = []
-    for alpha_i in np.arange(0, wealth + alpha_step_size/2, alpha_step_size):
+    for alpha_i in np.arange(0, max_alpha + alpha_step_size/2, alpha_step_size):
         wr = win_reward(z2, alpha_bar, exp.beta, exp.k, exp.mining_cost, 
                         exp.num_agents, exp.block_reward) - alpha_i * exp.mining_cost
         wp = win_probability(alpha_i, alpha_bar, exp.num_agents)

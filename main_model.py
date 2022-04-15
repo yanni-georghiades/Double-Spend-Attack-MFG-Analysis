@@ -19,8 +19,8 @@ def main():
                         num_agents=10,
                         max_wealth=100,
                         max_tx_value=100,
-                        T=5,
-                        N=5,
+                        T=10,
+                        N=20,
                         momentum=.1)
 
     VALUE_HISTORY = []
@@ -93,8 +93,9 @@ def main():
                 win_wealth = round(wealth + wr)
                 lose_wealth = round(wealth + lr)
                 if lose_wealth < 0:
-                    print(wealth + lr)
-                    print("negative wealth detected")
+                    # print(wealth + lr)
+                    # print("negative wealth detected")
+                    lose_wealth = 0
                 wealth_distribution[min(win_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * wp
                 wealth_distribution[min(lose_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * (1 - wp)
                 
@@ -113,6 +114,7 @@ def main():
             new_alpha_bar = exp.momentum * ALPHA_BAR_HISTORY[n][t] + (1 - exp.momentum) * avg
             ALPHA_BAR.append(new_alpha_bar)
             
+        print(ALPHA_BAR)
         ALPHA_BAR_HISTORY.append(ALPHA_BAR)
 
     exp.add_results(VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY)
