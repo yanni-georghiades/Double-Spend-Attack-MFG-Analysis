@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import sys
 
 from output import Experiment
-from helper_functions import select_best_parameters, best_actions
+from helper_functions import  best_actions
 from environment_model import reward, win_probability, win_reward
 
 
@@ -14,14 +14,14 @@ def main():
     exp = Experiment(   k=6, 
                         beta=.4,
                         block_reward=10,
-                        alpha_bar_init=.5,
+                        alpha_bar_init=1.,
                         mining_cost=1,
                         num_agents=10,
                         max_wealth=100,
                         max_tx_value=100,
-                        T=10,
-                        N=20,
-                        momentum=.1)
+                        T=4,
+                        N=4,
+                        momentum=.9)
 
     VALUE_HISTORY = []
     ALPHA_HISTORY = []
@@ -35,22 +35,20 @@ def main():
     for n in range(exp.N):
         Z = []
         ALPHA = []
+        VALUE = []
 
         vx = []
         ax = []
         zx = []
-        for x in range(exp.max_wealth):
-            alpha, z = select_best_parameters(exp)
+        for wealth in range(exp.max_wealth):
+            alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
             rew = reward(exp, alpha, z, ALPHA_BAR_HISTORY[n][0])
             ax.append(alpha)
             zx.append(z)
             vx.append(rew)
-            # this doesn't work.
         
         ALPHA.append(ax)
         Z.append(zx)
-        
-        VALUE = []
         VALUE.append(vx)
 
         for t in range(exp.T, 0, -1):
@@ -58,7 +56,7 @@ def main():
             ax = []
             zx = []
             for wealth in range(exp.max_wealth):
-                alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][t], wealth, VALUE[exp.T-t])
+                alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][exp.T-t], wealth, VALUE[exp.T-t])
                 ax.append(alpha)
                 zx.append(z)
                 vx.append(val)
@@ -67,6 +65,11 @@ def main():
             Z.append(zx)
             VALUE.append(vx)
         
+        # reverse lists in place because we constructed them backwards
+        VALUE.reverse()
+        Z.reverse()
+        ALPHA.reverse()
+
         VALUE_HISTORY.append(VALUE)
         Z_HISTORY.append(Z)
         ALPHA_HISTORY.append(ALPHA)
@@ -109,8 +112,9 @@ def main():
             avg = 0.
             for wealth in range(exp.max_wealth):
                 alpha = ALPHA_HISTORY[n][t][wealth]
-                density = WEALTH[t][wealth]
+                density = WEALTH_HISTORY[n][t][wealth]
                 avg += alpha * density
+            print(avg)
             new_alpha_bar = exp.momentum * ALPHA_BAR_HISTORY[n][t] + (1 - exp.momentum) * avg
             ALPHA_BAR.append(new_alpha_bar)
             

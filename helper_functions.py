@@ -5,34 +5,34 @@ from adversary_model import adv_cost, adv_prob
 
 alpha_step_size = 0.1
 
-def select_best_parameters(exp):
-    z = 0
-    alpha = 0
+# def select_best_parameters(exp):
+#     z = 0
+#     alpha = 0
 
-    for i in range(5):
-        z = select_best_z(alpha, exp.max_tx_value, exp.alpha_bar_init, exp.beta, exp.k, exp.mining_cost, 
-            exp.num_agents, exp.block_reward)
-        alpha = select_best_alpha(exp.max_wealth, z, exp.alpha_bar_init, exp.beta, exp.k, exp.mining_cost, 
-            exp.num_agents, exp.block_reward)
+#     for i in range(5):
+#         z = select_best_z(alpha, exp.max_tx_value, exp.alpha_bar_init, exp.beta, exp.k, exp.mining_cost, 
+#             exp.num_agents, exp.block_reward)
+#         alpha = select_best_alpha(exp.max_wealth, z, exp.alpha_bar_init, exp.beta, exp.k, exp.mining_cost, 
+#             exp.num_agents, exp.block_reward)
         
-    return (alpha, z)
+#     return (alpha, z)
 
 
-def select_best_z(alpha, max_z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
-    rewards = []
-    for i in range(max_z + 1):
-        rewards.append(R(alpha, i, alpha_bar, beta, k, mining_cost, num_agents, block_reward))
+# def select_best_z(alpha, max_z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
+#     rewards = []
+#     for i in range(max_z + 1):
+#         rewards.append(R(alpha, i, alpha_bar, beta, k, mining_cost, num_agents, block_reward))
 
-    return rewards.index(max(rewards))
+#     return rewards.index(max(rewards))
 
 
-def select_best_alpha(max_alpha, z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
-    rewards = []
+# def select_best_alpha(max_alpha, z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
+#     rewards = []
 
-    for i in np.arange(0, max_alpha + alpha_step_size/2, alpha_step_size):
-        rewards.append(R(i, z, alpha_bar, beta, k, mining_cost, num_agents, block_reward))
+#     for i in np.arange(0, max_alpha + alpha_step_size/2, alpha_step_size):
+#         rewards.append(R(i, z, alpha_bar, beta, k, mining_cost, num_agents, block_reward))
 
-    return rewards.index(max(rewards)) * alpha_step_size
+#     return rewards.index(max(rewards)) * alpha_step_size
 
 
 def best_actions(exp, alpha_bar, wealth, values):
@@ -87,6 +87,11 @@ def best_actions(exp, alpha_bar, wealth, values):
         
         rewards2.append(rew + wp * win_value + (1 - wp) * lose_value)
 
+    # print("rewards1")
+    # print(rewards1)
+    # print("rewards2")
+    # print(rewards2)
+
     
     # select highest reward. in case of a tie, go with z_hat
     if max(rewards1) >= max(rewards2) and zh < exp.max_tx_value:
@@ -98,4 +103,8 @@ def best_actions(exp, alpha_bar, wealth, values):
         alpha = rewards2.index(max(rewards2)) * alpha_step_size
         val = max(rewards2)
     
+    # print(alpha)
+    # print(z)
+    # print(val)
+
     return (alpha, z, val)
