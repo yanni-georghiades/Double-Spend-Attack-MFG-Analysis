@@ -42,16 +42,22 @@ class Experiment():
 
 
 		axs[0,0].plot(self.ALPHA_BAR_HISTORY[-1])
-		axs[0,0].set_title("Alpha Bar")
+		axs[0,0].set_title("Alpha Bar Final Iteration")
 		axs[0,0].set(xlabel='T', ylabel='Mean Hash Power')
 
 		# axs[0,1].plot(self.Z[len(self.Z)-1])
 		# axs[0,1].set_title("Z")
 		# axs[0,1].set(xlabel='Wealth', ylabel='Transaction Value in Block')
+		color = iter(cm.rainbow(np.linspace(0,1,len(self.ALPHA_BAR_HISTORY))))
+		for ab in self.ALPHA_BAR_HISTORY:
+			c = next(color)
+			axs[0,1].plot(ab, c=c)
+		axs[0,1].set_title("Alpha Bar Evolution")
+		axs[0,1].set(xlabel="T", ylabel="Alpha Bar")
 
 		
 
-		wealth = self.WEALTH_HISTORY[len(self.WEALTH_HISTORY)-1]
+		wealth = self.WEALTH_HISTORY[-1]
 		color = iter(cm.rainbow(np.linspace(0, 1, len(wealth))))
 		for w in wealth:
 			c = next(color)

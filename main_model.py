@@ -12,7 +12,7 @@ from environment_model import reward, win_probability, win_reward
 def main():
 
     exp = Experiment(   k=6, 
-                        beta=.4,
+                        beta=.0001,
                         block_reward=10,
                         alpha_bar_init=.5,
                         mining_cost=1,
@@ -111,7 +111,10 @@ def main():
                 alpha = ALPHA_HISTORY[n][t][wealth]
                 density = WEALTH[t][wealth]
                 avg += alpha * density
+            print(avg)
+            print(ALPHA_BAR_HISTORY[n][t])
             new_alpha_bar = exp.momentum * ALPHA_BAR_HISTORY[n][t] + (1 - exp.momentum) * avg
+            print(new_alpha_bar)
             ALPHA_BAR.append(new_alpha_bar)
             
         print(ALPHA_BAR)
