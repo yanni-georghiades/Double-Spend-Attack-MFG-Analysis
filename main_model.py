@@ -5,8 +5,9 @@ from matplotlib import pyplot as plt
 import sys
 
 from output import Experiment
-from helper_functions import  best_actions
+from helper_functions import  best_actions, converged
 from environment_model import reward, win_probability, win_reward
+from adversary_model import A
 
 
 def main():
@@ -19,8 +20,8 @@ def main():
                         num_agents=10,
                         max_wealth=100,
                         max_tx_value=100,
-                        T=4,
-                        N=4,
+                        T=5,
+                        N=30,
                         momentum=.9)
 
     VALUE_HISTORY = []
@@ -28,6 +29,7 @@ def main():
     WEALTH_HISTORY = []
     ALPHA_BAR_HISTORY = []
     Z_HISTORY = []
+    ATTACK_HISTORY = []
 
     ALPHA_BAR = [exp.alpha_bar_init] * (exp.T + 1)
     ALPHA_BAR_HISTORY.append(ALPHA_BAR)
@@ -79,13 +81,14 @@ def main():
         w = np.random.rand(exp.max_wealth, )
         wealth_distribution = w / sum(w)
         WEALTH.append(wealth_distribution)
+
+        
         
         for t in range(0, exp.T+1, 1):
             wealth_distribution = np.zeros(exp.max_wealth)
             for wealth in range(exp.max_wealth):
                 alpha = ALPHA_HISTORY[n][t][wealth]
                 z = Z_HISTORY[n][t][wealth]
-            
         
     #             The following is code which factors in probability of win/loss instead of simply expected reward
                 wp = win_probability(alpha, ALPHA_BAR_HISTORY[n][t], exp.num_agents)
@@ -103,10 +106,23 @@ def main():
                 wealth_distribution[min(lose_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * (1 - wp)
                 
             WEALTH.append(wealth_distribution)
-                
+
         # save wealth distribution from time T
         WEALTH_HISTORY.append(WEALTH)
-            
+                
+        # count the number of times the adversary can profit from an attack
+        ATTACK = []
+        for t in range(0, exp.T+1, 1):
+            a = 0
+            # sum up the fraction of miners which create a block that is vulnerable to attack
+            for wealth in range(exp.max_wealth):
+                z = Z_HISTORY[n][t][wealth]
+                a += A(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.block_reward, 
+                        exp.num_agents, exp.mining_cost) *  WEALTH[t][wealth]
+            ATTACK.append(a)
+        ATTACK_HISTORY.append(ATTACK)
+        
+        # determine next sequence of alpha bars    
         ALPHA_BAR = []
         for t in range(0, exp.T+1):
             avg = 0.
@@ -114,14 +130,19 @@ def main():
                 alpha = ALPHA_HISTORY[n][t][wealth]
                 density = WEALTH_HISTORY[n][t][wealth]
                 avg += alpha * density
-            print(avg)
+            # print(avg)
             new_alpha_bar = exp.momentum * ALPHA_BAR_HISTORY[n][t] + (1 - exp.momentum) * avg
             ALPHA_BAR.append(new_alpha_bar)
             
-        print(ALPHA_BAR)
         ALPHA_BAR_HISTORY.append(ALPHA_BAR)
 
-    exp.add_results(VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY)
+        print("n: " + str(n))
+        if converged(ALPHA_BAR_HISTORY):
+            print("Converged!")
+            break
+
+
+    exp.add_results(VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY, ATTACK_HISTORY)
     exp.save_to_file(sys.argv[1])
 
 

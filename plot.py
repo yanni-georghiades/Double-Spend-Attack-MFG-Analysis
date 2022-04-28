@@ -26,4 +26,18 @@ except Exception as ex:
 # 	print(experiment.Z_HISTORY[n])
 
 
+print("Experiment Information:")
+print("=" * 20)
+print("k: " + str(experiment.k))
+print("beta: " + str(experiment.beta))
+print("block reward: " + str(experiment.block_reward))
+print("alpha bar init: " + str(experiment.alpha_bar_init))
+print("mining cost: " + str(experiment.mining_cost))
+print("number of agents: " + str(experiment.num_agents))
+print("max wealth: " + str(experiment.max_wealth))
+print("max z: " + str(experiment.max_tx_value))
+print("T: " + str(experiment.T))
+print("N: " + str(experiment.N))
+print("momentum: " + str(experiment.momentum))
+
 experiment.plot()

@@ -108,3 +108,13 @@ def best_actions(exp, alpha_bar, wealth, values):
     # print(val)
 
     return (alpha, z, val)
+
+
+def converged(history):
+    check = True
+    ab1 = history[-1]
+    ab2 = history[-2]
+    for i in range(len(ab1)):
+        if abs(ab1[i] - ab2[i]) > .01:
+            check = False
+    return check

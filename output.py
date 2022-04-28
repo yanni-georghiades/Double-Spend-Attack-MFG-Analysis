@@ -21,12 +21,13 @@ class Experiment():
 		self.momentum = momentum
 
 
-	def add_results(self, VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY):
+	def add_results(self, VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY, ATTACK_HISTORY):
 		self.VALUE_HISTORY = VALUE_HISTORY
 		self.ALPHA_HISTORY = ALPHA_HISTORY
 		self.WEALTH_HISTORY = WEALTH_HISTORY
 		self.ALPHA_BAR_HISTORY = ALPHA_BAR_HISTORY
 		self.Z_HISTORY = Z_HISTORY
+		self.ATTACK_HISTORY = ATTACK_HISTORY
 
 
 	def save_to_file(self, file_name):
@@ -38,7 +39,7 @@ class Experiment():
 
 
 	def plot(self):
-		fig, axs = plt.subplots(2, 2,figsize=(10,10))
+		fig, axs = plt.subplots(3, 3,figsize=(15,10))
 
 
 		axs[0,0].plot(self.ALPHA_BAR_HISTORY[-1])
@@ -69,9 +70,16 @@ class Experiment():
 		for z in self.Z_HISTORY[-1]:
 			zs.append(z[-1])
 		axs[1,1].plot(zs)
-		axs[1,1].set_title("Z")
+		axs[1,1].set_title("Z Selected at Max Wealth")
 		axs[1,1].set(xlabel='T', ylabel='Transaction Value')
 
+		color = iter(cm.rainbow(np.linspace(0,1,len(self.Z_HISTORY[-1]))))
+		for z in self.Z_HISTORY[-1]:
+			c = next(color)
+			axs[1,2].plot(z)
+			print(z)
+		axs[1,2].set_title("Z Evolution in Final Iteration")
+		axs[1,2].set(xlabel='Wealth', ylabel='Transaction Value')
 
 		plt.show()
 
