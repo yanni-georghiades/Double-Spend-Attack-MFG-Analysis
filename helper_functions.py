@@ -115,6 +115,6 @@ def converged(history):
     ab1 = history[-1]
     ab2 = history[-2]
     for i in range(len(ab1)):
-        if abs(ab1[i] - ab2[i]) > .01:
+        if abs(ab1[i] - ab2[i]) > .001:
             check = False
     return check
