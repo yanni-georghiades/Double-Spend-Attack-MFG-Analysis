@@ -2,6 +2,7 @@ import numpy as np
 
 from environment_model import R, win_reward, win_probability, reward
 from adversary_model import adv_cost, adv_prob
+from fee_function import fee
 
 alpha_step_size = 0.1
 
@@ -103,6 +104,14 @@ def best_actions(exp, alpha_bar, wealth, values):
         alpha = rewards2.index(max(rewards2)) * alpha_step_size
         val = max(rewards2)
     
+    P = adv_prob(alpha_bar, exp.beta, exp.k)
+    if z > zh:
+        analytical = np.sqrt((1 - P)*(exp.block_reward + fee(z)) * exp.num_agents * alpha_bar / exp.mining_cost) - exp.num_agents * alpha_bar
+    else:
+        analytical = np.sqrt((exp.block_reward + fee(z)) * exp.num_agents * alpha_bar / exp.mining_cost) - exp.num_agents * alpha_bar
+
+    print("alpha chosen: " + str(alpha))
+    print("analytical alpha: " + str(analytical))
     # print(alpha)
     # print(z)
     # print(val)

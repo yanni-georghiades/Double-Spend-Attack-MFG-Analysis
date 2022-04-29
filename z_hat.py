@@ -13,8 +13,8 @@ def z_hat(alpha_bar, beta, k, block_reward, num_agents, mining_cost):
 
 
 
-alpha_bar = .5
-beta = .4
+alpha_bar = .9
+beta = .45
 k = 6
 block_reward = 10
 num_agents = 10

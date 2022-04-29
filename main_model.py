@@ -13,15 +13,15 @@ from adversary_model import A
 def main():
 
     exp = Experiment(   k=6, 
-                        beta=.4,
+                        beta=.45,
                         block_reward=10,
                         alpha_bar_init=1.,
                         mining_cost=1,
                         num_agents=10,
-                        max_wealth=100,
+                        max_wealth=10,
                         max_tx_value=100,
-                        T=5,
-                        N=30,
+                        T=2,
+                        N=100,
                         momentum=.9)
 
     VALUE_HISTORY = []
@@ -78,10 +78,12 @@ def main():
         
         # initialize wealth randomly
         WEALTH = []
-        w = np.random.rand(exp.max_wealth, )
-        wealth_distribution = w / sum(w)
+        # w = np.random.rand(exp.max_wealth, )
+        # wealth_distribution = w / sum(w)
+        # WEALTH.append(wealth_distribution)
+        wealth_distribution = [0.] * exp.max_wealth
+        wealth_distribution[5] = 1.
         WEALTH.append(wealth_distribution)
-
         
         
         for t in range(0, exp.T+1, 1):

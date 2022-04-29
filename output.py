@@ -77,7 +77,7 @@ class Experiment():
 		for z in self.Z_HISTORY[-1]:
 			c = next(color)
 			axs[1,2].plot(z)
-			print(z)
+			# print(z)
 		axs[1,2].set_title("Z Evolution in Final Iteration")
 		axs[1,2].set(xlabel='Wealth', ylabel='Transaction Value')
 
