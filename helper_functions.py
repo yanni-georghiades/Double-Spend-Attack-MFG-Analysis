@@ -129,7 +129,9 @@ def best_actions2(exp, alpha_bar, wealth, values):
     T = A(z, alpha_bar, exp.beta, exp.k, exp.block_reward, exp.num_agents, exp.mining_cost)
 
     max_alpha = wealth / exp.mining_cost
-    alpha = np.sqrt((1 - P*T)*(exp.block_reward + fee(z)) * exp.num_agents * alpha_bar / exp.mining_cost) \
+    # alpha = np.sqrt((1 - P*T)*(exp.block_reward + fee(z)) * exp.num_agents * alpha_bar / exp.mining_cost) \
+    #                 - exp.num_agents * alpha_bar
+    alpha = np.sqrt((exp.block_reward + fee(z)) * exp.num_agents * alpha_bar / exp.mining_cost) \
                     - exp.num_agents * alpha_bar
     alpha = np.minimum(alpha, max_alpha * np.ones(z.shape))
     alpha = np.maximum(alpha, np.zeros(z.shape))
@@ -150,39 +152,39 @@ def best_actions2(exp, alpha_bar, wealth, values):
     val = F[idx]
     z_ret = z[idx]
 
-    if T[idx] > .5 and wealth >= 20:
-        print(alpha[idx])
-        print(z_ret)
-        print(val)
-        # for i in range(z.shape[0]):
-        #     print('=' * 10)
-        #     print(F[i])
-        #     print(z[i])
-        #     print(alpha[i])
+    # if T[idx] > .5 and wealth >= 20:
+    #     print(alpha[idx])
+    #     print(z_ret)
+    #     print(val)
+    #     # for i in range(z.shape[0]):
+    #     #     print('=' * 10)
+    #     #     print(F[i])
+    #     #     print(z[i])
+    #     #     print(alpha[i])
 
-        C = adv_cost(alpha_bar, exp.beta, exp.k, exp.block_reward, 
-                     exp.num_agents, exp.mining_cost)
-        P = adv_prob(alpha_bar, exp.beta, exp.k)
+    #     C = adv_cost(alpha_bar, exp.beta, exp.k, exp.block_reward, 
+    #                  exp.num_agents, exp.mining_cost)
+    #     P = adv_prob(alpha_bar, exp.beta, exp.k)
 
-        zh = (C / P - (exp.k+1)*exp.block_reward) / 1.01 # change this when the fee function changes
-        print(zh)
+    #     zh = (C / P - (exp.k+1)*exp.block_reward) / 1.01 # change this when the fee function changes
+    #     print(zh)
 
-        zh_idx = np.where(zh)[0]
-        print(alpha[zh_idx])
-        print(F[zh_idx])
+    #     zh_idx = np.where(zh)[0]
+    #     print(alpha[zh_idx])
+    #     print(F[zh_idx])
 
-        print(wealth)
-        plt.figure()
-        plt.plot(alpha)
-        plt.figure()
-        plt.plot(F)
-        plt.figure()
-        plt.plot(lose_wealth)
-        plt.figure()
-        plt.plot(win_wealth)
-        plt.figure()
-        plt.plot(vals)
-        plt.show()
+    #     print(wealth)
+    #     plt.figure()
+    #     plt.plot(alpha)
+    #     plt.figure()
+    #     plt.plot(F)
+    #     plt.figure()
+    #     plt.plot(lose_wealth)
+    #     plt.figure()
+    #     plt.plot(win_wealth)
+    #     plt.figure()
+    #     plt.plot(vals)
+    #     plt.show()
 
     return (alpha[idx], z_ret, val)
 

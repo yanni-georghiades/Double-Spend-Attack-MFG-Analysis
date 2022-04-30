@@ -13,7 +13,7 @@ from adversary_model import A
 def main():
 
     exp = Experiment(   k=6, 
-                        beta=.4,
+                        beta=.000001,
                         block_reward=10,
                         alpha_bar_init=1.,
                         mining_cost=1,
