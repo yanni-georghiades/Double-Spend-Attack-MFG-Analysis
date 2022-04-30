@@ -135,8 +135,7 @@ def best_actions2(exp, alpha_bar, wealth, values):
     alpha = np.minimum(alpha, max_alpha * np.ones(z.shape))
     alpha = np.maximum(alpha, np.zeros(z.shape))
     
-    wr = win_reward(z, alpha_bar, exp.beta, exp.k, exp.mining_cost, 
-                        exp.num_agents, exp.block_reward) - alpha * exp.mining_cost
+    wr = exp.block_reward + fee(z) - alpha * exp.mining_cost
     wp = alpha / (alpha + exp.num_agents * alpha_bar)
     lr = - alpha * exp.mining_cost
     
@@ -146,39 +145,40 @@ def best_actions2(exp, alpha_bar, wealth, values):
     lose_wealth = np.round(wealth + lr)
     lose_value = vals[np.minimum(lose_wealth, exp.max_wealth).astype(int) - 1]
 
-    F = (1 - P * T) * (exp.block_reward + fee(z)) * wp  + lr + wp * win_value + (1 - wp) * lose_value
+    # F = (1 - P * T) * (exp.block_reward + fee(z)) * wp  + lr + wp * win_value + (1 - wp) * lose_value
+    F = (exp.block_reward + fee(z)) * wp  + lr + wp * win_value + (1 - wp) * lose_value
     idx = np.argmax(F)
     val = F[idx]
     z_ret = z[idx]
 
-    if T[idx] > .5:
-        print(alpha[idx])
-        print(z_ret)
-        print(val)
-        # for i in range(z.shape[0]):
-        #     print('=' * 10)
-        #     print(F[i])
-        #     print(z[i])
-        #     print(alpha[i])
+    # if T[idx] > .5:
+    #     print(alpha[idx])
+    #     print(z_ret)
+    #     print(val)
+    #     # for i in range(z.shape[0]):
+    #     #     print('=' * 10)
+    #     #     print(F[i])
+    #     #     print(z[i])
+    #     #     print(alpha[i])
 
-        C = adv_cost(alpha_bar, exp.beta, exp.k, exp.block_reward, 
-                     exp.num_agents, exp.mining_cost)
-        P = adv_prob(alpha_bar, exp.beta, exp.k)
+    #     C = adv_cost(alpha_bar, exp.beta, exp.k, exp.block_reward, 
+    #                  exp.num_agents, exp.mining_cost)
+    #     P = adv_prob(alpha_bar, exp.beta, exp.k)
 
-        zh = (C / P - (exp.k+1)*exp.block_reward) / 1.01 # change this when the fee function changes
-        print(zh)
+    #     zh = (C / P - (exp.k+1)*exp.block_reward) / 1.01 # change this when the fee function changes
+    #     print(zh)
 
-        zh_idx = np.where(zh)[0]
-        print(alpha[zh_idx])
-        print(F[zh_idx])
+    #     zh_idx = np.where(zh)[0]
+    #     print(alpha[zh_idx])
+    #     print(F[zh_idx])
 
-    F_HISTORY.append(F)
+    # F_HISTORY.append(F)
 
-    plt.figure()
-    plt.plot(alpha)
-    plt.figure()
-    plt.plot(F)
-    plt.show()
+    # plt.figure()
+    # plt.plot(alpha)
+    # plt.figure()
+    # plt.plot(F)
+    # plt.show()
     # print(T[idx])
     return (alpha[idx], z_ret, val)
 
