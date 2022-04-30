@@ -7,7 +7,7 @@ import sys
 from output import Experiment
 from helper_functions import converged, best_actions2
 from environment_model import reward, win_probability, win_reward
-from adversary_model import A
+from adversary_model import A, adv_prob
 
 
 def main():
@@ -93,7 +93,9 @@ def main():
                 z = Z_HISTORY[n][t][wealth]
         
     #             The following is code which factors in probability of win/loss instead of simply expected reward
-                wp = win_probability(alpha, ALPHA_BAR_HISTORY[n][t], exp.num_agents)
+                P = adv_prob(ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k)
+                T = A(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.block_reward, exp.num_agents, exp.mining_cost)
+                wp = win_probability(alpha, ALPHA_BAR_HISTORY[n][t], exp.num_agents) * (1 - P*T)
                 wr = win_reward(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.mining_cost, 
                                 exp.num_agents, exp.block_reward) - alpha * exp.mining_cost
                 lr = - alpha * exp.mining_cost

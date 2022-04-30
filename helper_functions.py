@@ -136,7 +136,7 @@ def best_actions2(exp, alpha_bar, wealth, values):
     
     wr = win_reward(z, alpha_bar, exp.beta, exp.k, exp.mining_cost, 
                         exp.num_agents, exp.block_reward) - alpha * exp.mining_cost
-    wp = alpha / (alpha + exp.num_agents * alpha_bar)
+    wp = alpha / (alpha + exp.num_agents * alpha_bar) * (1 - P*T)
     lr = - alpha * exp.mining_cost
     
     win_wealth = np.round(wealth + wr)
