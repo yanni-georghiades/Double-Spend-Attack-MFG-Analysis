@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import sys
 
 from output import Experiment
-from helper_functions import  best_actions, converged
+from helper_functions import converged, best_actions2, F_HISTORY
 from environment_model import reward, win_probability, win_reward
 from adversary_model import A
 
@@ -13,15 +13,15 @@ from adversary_model import A
 def main():
 
     exp = Experiment(   k=6, 
-                        beta=.45,
+                        beta=.4,
                         block_reward=10,
                         alpha_bar_init=1.,
                         mining_cost=1,
                         num_agents=10,
-                        max_wealth=10,
-                        max_tx_value=100,
-                        T=2,
-                        N=100,
+                        max_wealth=100,
+                        max_tx_value=1000,
+                        T=5,
+                        N=10,
                         momentum=.9)
 
     VALUE_HISTORY = []
@@ -43,7 +43,7 @@ def main():
         ax = []
         zx = []
         for wealth in range(exp.max_wealth):
-            alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
+            alpha, z, val = best_actions2(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
             rew = reward(exp, alpha, z, ALPHA_BAR_HISTORY[n][0])
             ax.append(alpha)
             zx.append(z)
@@ -58,7 +58,7 @@ def main():
             ax = []
             zx = []
             for wealth in range(exp.max_wealth):
-                alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][exp.T-t], wealth, VALUE[exp.T-t])
+                alpha, z, val = best_actions2(exp, ALPHA_BAR_HISTORY[n][exp.T-t], wealth, VALUE[exp.T-t])
                 ax.append(alpha)
                 zx.append(z)
                 vx.append(val)
@@ -82,7 +82,7 @@ def main():
         # wealth_distribution = w / sum(w)
         # WEALTH.append(wealth_distribution)
         wealth_distribution = [0.] * exp.max_wealth
-        wealth_distribution[5] = 1.
+        wealth_distribution[50] = 1.
         WEALTH.append(wealth_distribution)
         
         
@@ -101,8 +101,6 @@ def main():
                 win_wealth = round(wealth + wr)
                 lose_wealth = round(wealth + lr)
                 if lose_wealth < 0:
-                    # print(wealth + lr)
-                    # print("negative wealth detected")
                     lose_wealth = 0
                 wealth_distribution[min(win_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * wp
                 wealth_distribution[min(lose_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * (1 - wp)
@@ -147,6 +145,7 @@ def main():
     exp.add_results(VALUE_HISTORY, ALPHA_HISTORY, WEALTH_HISTORY, ALPHA_BAR_HISTORY, Z_HISTORY, ATTACK_HISTORY)
     exp.save_to_file(sys.argv[1])
 
+    # plt.plot
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ def reward(exp, alpha, z, alpha_bar):
              exp.num_agents, exp.block_reward)
 
 def win_reward(z, alpha_bar, beta, k, mining_cost, num_agents, block_reward):
-    return (1-(1-adv_prob(alpha_bar, beta, k))*A(z, alpha_bar, beta, k, block_reward, num_agents, mining_cost)) \
+    return (1-adv_prob(alpha_bar, beta, k)*A(z, alpha_bar, beta, k, block_reward, num_agents, mining_cost)) \
             *(block_reward + fee(z))
 
 

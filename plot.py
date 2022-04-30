@@ -40,6 +40,6 @@ print("T: " + str(experiment.T))
 print("N: " + str(experiment.N))
 print("momentum: " + str(experiment.momentum))
 
-print(experiment.ALPHA_HISTORY)
+# print(experiment.ATTACK_HISTORY)
 
 experiment.plot()

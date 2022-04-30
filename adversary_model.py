@@ -1,3 +1,4 @@
+import numpy as np
 from collections import defaultdict
 import itertools
 
@@ -107,6 +108,5 @@ def adv_reward(z, alpha_bar, beta, k, block_reward):
 
 # returns 1 if the adversary's expected reward is higher than their expected cost and 0 otherwise
 def A(z, alpha_bar, beta, k, block_reward, num_agents, mining_cost):
-    if adv_reward(z, alpha_bar, beta, k, block_reward) > adv_cost(alpha_bar, beta, k, block_reward, num_agents, mining_cost):
-        return 1
-    return 0
+    r = adv_reward(z, alpha_bar, beta, k, block_reward) - adv_cost(alpha_bar, beta, k, block_reward, num_agents, mining_cost)
+    return 1 / (1 + np.exp(-r))

@@ -56,7 +56,12 @@ class Experiment():
 		axs[0,1].set_title("Alpha Bar Evolution")
 		axs[0,1].set(xlabel="T", ylabel="Alpha Bar")
 
-		
+		abs = []
+		for ab in self.ALPHA_BAR_HISTORY:
+			abs.append(ab[0])
+		axs[0,2].plot(abs)
+		axs[0,2].set_title("Alpha bar over time")
+		axs[0,2].set(xlabel='n', ylabel='Alpha Bar')
 
 		wealth = self.WEALTH_HISTORY[-1]
 		color = iter(cm.rainbow(np.linspace(0, 1, len(wealth))))
@@ -80,6 +85,14 @@ class Experiment():
 			# print(z)
 		axs[1,2].set_title("Z Evolution in Final Iteration")
 		axs[1,2].set(xlabel='Wealth', ylabel='Transaction Value')
+
+		ats = []
+		for at in self.ATTACK_HISTORY:
+			ats.append(at[0])
+		axs[2,2].plot(ats)
+		axs[2,2].set_title("Attacks over time")
+		axs[2,2].set(xlabel='n', ylabel='Attack Intensity')
+
 
 		plt.show()
 
