@@ -42,4 +42,10 @@ print("momentum: " + str(experiment.momentum))
 
 # print(experiment.ATTACK_HISTORY)
 
+last_wealths = experiment.WEALTH_HISTORY[-1][-1]
+avg = 0
+for i in range(len(last_wealths)):
+	avg += i * last_wealths[i]
+print("Average ending wealth: " + str(avg))
+
 experiment.plot()
