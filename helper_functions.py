@@ -119,7 +119,6 @@ alpha_step_size = 0.1
 
 #     return (alpha, z, val)
 
-F_HISTORY = []
 
 def best_actions2(exp, alpha_bar, wealth, values):
     P = adv_prob(alpha_bar, exp.beta, exp.k)
@@ -144,14 +143,14 @@ def best_actions2(exp, alpha_bar, wealth, values):
     vals = np.array(values,)
     win_value = vals[np.minimum(win_wealth, exp.max_wealth).astype(int) - 1]
     lose_wealth = np.round(wealth + lr)
-    lose_value = vals[np.minimum(lose_wealth, exp.max_wealth).astype(int) - 1]
+    lose_value = vals[np.maximum(lose_wealth, 1).astype(int) - 1]
 
     F = (1 - P * T) * (exp.block_reward + fee(z)) * wp  + lr + wp * win_value + (1 - wp) * lose_value
     idx = np.argmax(F)
     val = F[idx]
     z_ret = z[idx]
 
-    if T[idx] > .5:
+    if T[idx] > .5 and wealth >= 20:
         print(alpha[idx])
         print(z_ret)
         print(val)
@@ -172,14 +171,19 @@ def best_actions2(exp, alpha_bar, wealth, values):
         print(alpha[zh_idx])
         print(F[zh_idx])
 
-    F_HISTORY.append(F)
+        print(wealth)
+        plt.figure()
+        plt.plot(alpha)
+        plt.figure()
+        plt.plot(F)
+        plt.figure()
+        plt.plot(lose_wealth)
+        plt.figure()
+        plt.plot(win_wealth)
+        plt.figure()
+        plt.plot(vals)
+        plt.show()
 
-    plt.figure()
-    plt.plot(alpha)
-    plt.figure()
-    plt.plot(F)
-    plt.show()
-    # print(T[idx])
     return (alpha[idx], z_ret, val)
 
 

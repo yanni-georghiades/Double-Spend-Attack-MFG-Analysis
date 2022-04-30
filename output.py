@@ -1,4 +1,5 @@
 import pickle
+import itertools
 from matplotlib import pyplot as plt
 from matplotlib import cm
 import numpy as np
@@ -72,10 +73,14 @@ class Experiment():
 		axs[1,0].set(xlabel='Wealth', ylabel='Proportion of Miners')
 
 		zs = []
-		for z in self.Z_HISTORY[-1]:
-			zs.append(z[-1])
+		for zw, ww in zip(self.Z_HISTORY[-1], self.WEALTH_HISTORY[-1]):
+			avg = 0
+			for z, w in zip(zw, ww):
+				avg += z*w
+
+			zs.append(avg)
 		axs[1,1].plot(zs)
-		axs[1,1].set_title("Z Selected at Max Wealth")
+		axs[1,1].set_title("Average Z Selected")
 		axs[1,1].set(xlabel='T', ylabel='Transaction Value')
 
 		color = iter(cm.rainbow(np.linspace(0,1,len(self.Z_HISTORY[-1]))))
@@ -92,6 +97,10 @@ class Experiment():
 		axs[2,2].plot(ats)
 		axs[2,2].set_title("Attacks over time")
 		axs[2,2].set(xlabel='n', ylabel='Attack Intensity')
+
+		axs[2,0].plot(self.VALUE_HISTORY[-1][1])
+		axs[2,0].set_title("Value at t=0, n=N")
+		axs[2,0].set(xlabel='wealth', ylabel='value')
 
 
 		plt.show()
