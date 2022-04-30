@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import sys
 
 from output import Experiment
-from helper_functions import converged, best_actions2, F_HISTORY
+from helper_functions import converged, best_actions2
 from environment_model import reward, win_probability, win_reward
 from adversary_model import A
 
