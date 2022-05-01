@@ -14,14 +14,14 @@ def main():
 
     exp = Experiment(   k=6, 
                         beta=.4,
-                        block_reward=10,
+                        block_reward=17.5,
                         alpha_bar_init=1.,
                         mining_cost=1,
                         num_agents=10,
                         max_wealth=100,
                         max_tx_value=1000,
                         T=5,
-                        N=10,
+                        N=20,
                         momentum=.9)
 
     VALUE_HISTORY = []
@@ -88,7 +88,7 @@ def main():
         
         for t in range(0, exp.T+1, 1):
             wealth_distribution = np.zeros(exp.max_wealth)
-            for wealth in range(exp.max_wealth):
+            for wealth in range(exp.max_wealth-1):
                 alpha = ALPHA_HISTORY[n][t][wealth]
                 z = Z_HISTORY[n][t][wealth]
         
@@ -102,10 +102,11 @@ def main():
                 
                 win_wealth = round(wealth + wr)
                 lose_wealth = round(wealth + lr)
+                
                 if lose_wealth < 0:
                     lose_wealth = 0
-                wealth_distribution[min(win_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * wp
-                wealth_distribution[min(lose_wealth, exp.max_wealth) - 1] += WEALTH[t][wealth] * (1 - wp)
+                wealth_distribution[min(win_wealth, exp.max_wealth-1)] += WEALTH[t][wealth] * wp
+                wealth_distribution[min(lose_wealth, exp.max_wealth-1)] += WEALTH[t][wealth] * (1 - wp)
                 
             WEALTH.append(wealth_distribution)
 
