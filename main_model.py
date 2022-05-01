@@ -13,7 +13,7 @@ from adversary_model import A, adv_prob
 def main():
 
     exp = Experiment(   k=6, 
-                        beta=.2,
+                        beta=0.45,
                         block_reward=15,
                         alpha_bar_init=1.,
                         mining_cost=1,
@@ -85,7 +85,7 @@ def main():
         wealth_distribution[50] = 1.
         WEALTH.append(wealth_distribution)
         
-        
+        beta2 = 0
         for t in range(0, exp.T+1, 1):
             wealth_distribution = np.zeros(exp.max_wealth)
             for wealth in range(exp.max_wealth-1):
@@ -93,10 +93,10 @@ def main():
                 z = Z_HISTORY[n][t][wealth]
         
     #             The following is code which factors in probability of win/loss instead of simply expected reward
-                P = adv_prob(ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k)
-                T = A(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.block_reward, exp.num_agents, exp.mining_cost)
+                P = adv_prob(ALPHA_BAR_HISTORY[n][t], beta2, exp.k)
+                T = A(z, ALPHA_BAR_HISTORY[n][t], beta2, exp.k, exp.block_reward, exp.num_agents, exp.mining_cost)
                 wp = win_probability(alpha, ALPHA_BAR_HISTORY[n][t], exp.num_agents) * (1 - P*T)
-                wr = win_reward(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.mining_cost, 
+                wr = win_reward(z, ALPHA_BAR_HISTORY[n][t], beta2, exp.k, exp.mining_cost, 
                                 exp.num_agents, exp.block_reward) - alpha * exp.mining_cost
                 lr = - alpha * exp.mining_cost
                 
@@ -120,7 +120,7 @@ def main():
             # sum up the fraction of miners which create a block that is vulnerable to attack
             for wealth in range(exp.max_wealth):
                 z = Z_HISTORY[n][t][wealth]
-                a += A(z, ALPHA_BAR_HISTORY[n][t], exp.beta, exp.k, exp.block_reward, 
+                a += A(z, ALPHA_BAR_HISTORY[n][t], beta2, exp.k, exp.block_reward, 
                         exp.num_agents, exp.mining_cost) *  WEALTH[t][wealth]
             ATTACK.append(a)
         ATTACK_HISTORY.append(ATTACK)
