@@ -44,10 +44,10 @@ def main():
         zx = []
         for wealth in range(exp.max_wealth):
             alpha, z, val = best_actions2(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
-            rew = reward(exp, alpha, z, ALPHA_BAR_HISTORY[n][0])
+            # rew = reward(exp, alpha, z, ALPHA_BAR_HISTORY[n][0])
             ax.append(alpha)
             zx.append(z)
-            vx.append(rew)
+            vx.append(val)
         
         ALPHA.append(ax)
         Z.append(zx)
