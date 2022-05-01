@@ -14,7 +14,7 @@ def main():
 
     exp = Experiment(   k=6, 
                         beta=.4,
-                        block_reward=17.5,
+                        block_reward=10,
                         alpha_bar_init=1.,
                         mining_cost=1,
                         num_agents=10,
