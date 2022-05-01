@@ -88,7 +88,7 @@ class Experiment():
 			c = next(color)
 			axs[1,2].plot(z)
 			# print(z)
-		axs[1,2].set_title("Z Evolution in Final Iteration")
+		axs[1,2].set_title("Z wrt Wealth in Final Iteration")
 		axs[1,2].set(xlabel='Wealth', ylabel='Transaction Value')
 
 		ats = []
@@ -101,6 +101,10 @@ class Experiment():
 		axs[2,0].plot(self.VALUE_HISTORY[-1][1])
 		axs[2,0].set_title("Value at t=0, n=N")
 		axs[2,0].set(xlabel='wealth', ylabel='value')
+
+		axs[2,1].plot(self.ATTACK_HISTORY[-1])
+		axs[2,1].set_title("Attack Prob wrt Wealth in Final Iteration")
+		axs[2,1].set(xlabel='Wealth', ylabel='Attack Prob')
 
 
 		plt.show()
