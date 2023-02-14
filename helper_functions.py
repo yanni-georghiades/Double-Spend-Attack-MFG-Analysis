@@ -75,6 +75,7 @@ def best_actions(exp, alpha_bar, wealth, values):
     #     plt.show()
 
     return (alpha[idx], z_ret, val)
+    # return (0,0,0)
 
 
 def converged(history):
