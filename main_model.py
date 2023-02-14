@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import sys
 
 from output import Experiment
-from helper_functions import converged, best_actions2
+from helper_functions import converged, best_actions
 from environment_model import reward, win_probability, win_reward
 from adversary_model import A, adv_prob
 
@@ -43,7 +43,7 @@ def main():
         ax = []
         zx = []
         for wealth in range(exp.max_wealth):
-            alpha, z, val = best_actions2(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
+            alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][0], wealth, [0] * exp.max_wealth)
             # rew = reward(exp, alpha, z, ALPHA_BAR_HISTORY[n][0])
             ax.append(alpha)
             zx.append(z)
@@ -58,7 +58,7 @@ def main():
             ax = []
             zx = []
             for wealth in range(exp.max_wealth):
-                alpha, z, val = best_actions2(exp, ALPHA_BAR_HISTORY[n][exp.T-t], wealth, VALUE[exp.T-t])
+                alpha, z, val = best_actions(exp, ALPHA_BAR_HISTORY[n][exp.T-t], wealth, VALUE[exp.T-t])
                 ax.append(alpha)
                 zx.append(z)
                 vx.append(val)
